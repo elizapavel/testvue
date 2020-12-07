@@ -1,0 +1,21 @@
+stages:
+        - build
+        - deploy
+build_app:
+        image: node:latest
+        stage: build
+        script:
+                - npm install
+                - npm run build
+        artifacts:
+                paths:
+                    - dist/
+
+deploy_app:
+        image: "ruby:2.5"
+        stage: deploy
+        script:
+                - apt-get update -qy
+                - apt-get install rubygems ruby-dev -y
+                - gem install dpl
+                - dpl --provider=heroku --app=nbkjasnj --api-key=eadb91d8-630b-47e5-a2ee-3219607b9e46 --skip-cleanup
